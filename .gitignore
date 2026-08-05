@@ -1,0 +1,4 @@
+# Historique de marche : recuperable via backtest/fetch_data.sh
+backtest/data/
+__pycache__/
+*.pyc

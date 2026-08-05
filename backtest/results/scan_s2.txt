@@ -1,0 +1,15 @@
+=== IN-SAMPLE 2012-05-15 -> 2018-12-31 (96/96 configs retenues) ===
+min_rr=4.0 mtf_poi=True window=8 poi_kinds=('OB',) session=all partial=False   n= 320 wr= 25.3% pf= 1.13 E=+0.114R ret=  +34.8% dd= 13.8%
+min_rr=4.0 mtf_poi=False window=8 poi_kinds=('OB',) session=all partial=False  n= 228 wr= 25.4% pf= 1.13 E=+0.110R ret=  +23.3% dd= 16.3%
+min_rr=3.0 mtf_poi=False window=8 poi_kinds=('OB',) session=all partial=False  n= 246 wr= 29.3% pf= 1.12 E=+0.097R ret=  +22.3% dd= 17.2%
+min_rr=2.0 mtf_poi=False window=8 poi_kinds=('OB',) session=all partial=False  n= 267 wr= 34.5% pf= 1.12 E=+0.089R ret=  +23.9% dd= 19.3%
+min_rr=3.0 mtf_poi=True window=8 poi_kinds=('OB',) session=all partial=False   n= 353 wr= 28.3% pf= 1.08 E=+0.079R ret=  +26.0% dd= 19.8%
+min_rr=3.0 mtf_poi=False window=16 poi_kinds=('OB',) session=all partial=False n= 264 wr= 28.8% pf= 1.08 E=+0.068R ret=  +15.1% dd= 27.5%
+
+=== OUT-OF-SAMPLE 2019-01-01 -> 2022-03-05 (memes reglages) ===
+min_rr=4.0 mtf_poi=True window=8 poi_kinds=('OB',) session=all partial=False   n= 165 wr= 18.2% pf= 0.63 E=-0.286R ret=  -39.0% dd= 45.0%
+min_rr=4.0 mtf_poi=False window=8 poi_kinds=('OB',) session=all partial=False  n= 125 wr= 16.8% pf= 0.55 E=-0.364R ret=  -37.2% dd= 39.3%
+min_rr=3.0 mtf_poi=False window=8 poi_kinds=('OB',) session=all partial=False  n= 136 wr= 18.4% pf= 0.47 E=-0.413R ret=  -43.4% dd= 45.1%
+min_rr=2.0 mtf_poi=False window=8 poi_kinds=('OB',) session=all partial=False  n= 148 wr= 23.6% pf= 0.63 E=-0.262R ret=  -33.6% dd= 35.9%
+min_rr=3.0 mtf_poi=True window=8 poi_kinds=('OB',) session=all partial=False   n= 187 wr= 20.9% pf= 0.63 E=-0.267R ret=  -40.5% dd= 48.2%
+min_rr=3.0 mtf_poi=False window=16 poi_kinds=('OB',) session=all partial=False n= 141 wr= 18.4% pf= 0.47 E=-0.397R ret=  -44.1% dd= 45.1%
