@@ -74,7 +74,7 @@ Implementation : `_create_order_block()`, `_detect_fvg()`, `_update_zones()`.
 ## Utilisation
 
 ```bash
-# 1. Recuperer l'historique XAUUSD M15 (2012-2022)
+# 1. Recuperer l'historique XAUUSD M15 (2006-2025)
 ./backtest/fetch_data.sh
 
 # 2. Tests unitaires du moteur
@@ -88,6 +88,9 @@ python3 backtest/analyze.py
 
 # 5. Etude in-sample / out-of-sample
 python3 backtest/scan.py --strategy s3
+
+# 6. Tenue sur fenetres independantes et significativite statistique
+python3 backtest/robustness.py
 ```
 
 L'EA MetaTrader 4 correspondant est `strategies/SMC_ICT_EA.mq4`
@@ -97,6 +100,8 @@ defaut : mode alerte uniquement).
 ## Resultats
 
 Les resultats mesures sont dans **[BACKTEST_SMC.md](BACKTEST_SMC.md)** — a lire
-avant toute mise en production : sur XAUUSD 2012-2022, **les deux strategies
-sont perdantes** et ne se distinguent pas statistiquement d'entrees aleatoires
-a R:R equivalent.
+avant toute mise en production : sur XAUUSD 2006-2025 (18 ans, 424 996 bougies),
+**les deux strategies sont perdantes** avec une significativite statistique
+etablie, et ne se distinguent pas d'entrees aleatoires a R:R equivalent. Seule
+la #3 filtree par Premium/Discount sur des clusters de 3 sommets reste positive
+sur quatre fenetres consecutives, sans atteindre le seuil de significativite.

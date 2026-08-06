@@ -1,16 +1,16 @@
 Audit de XAUUSDm15.csv
 
 --- Fichier ---
-  Bougies      : 230,400 (M15)
-  Periode      : 2012-05-15 08:00:00 -> 2022-03-04 23:45:00
-  Prix         : min 1046.23 / max 2074.87
-  Plus haut le : 2020-08-07 01:15:00
-  Plus bas le  : 2015-12-03 03:15:00
-  Continuite   : 227,847 pas de 15 min, 2,552 interruptions (week-ends/feries), la plus longue 3.4 jours
-  Repartition  : lun 45,783, mar 46,318, mer 46,431, jeu 46,434, ven 45,434
+  Bougies      : 424,996 (M15)
+  Periode      : 2006-11-27 01:00:00 -> 2025-03-21 22:45:00
+  Prix         : min 601.50 / max 3057.26
+  Plus haut le : 2025-03-20 06:45:00
+  Plus bas le  : 2007-01-05 16:45:00
+  Continuite   : 419,068 pas de 15 min, 5,927 interruptions (week-ends/feries), la plus longue 3.6 jours
+  Repartition  : lun 84,454, mar 85,544, mer 85,959, jeu 85,431, ven 83,608
 
 --- Reperes historiques du marche de l'or ---
-[ passe] Sommet de septembre 2011 : hors de la periode couverte
+[  ok  ] Sommet de septembre 2011 : high du fichier 1920.61 vs reference 1920 (ecart 0.03%)
 [  ok  ] Krach des 12-15 avril 2013 : low du fichier 1321.54 vs reference 1321 (ecart 0.04%)
 [  ok  ] Plus bas du cycle, 3 decembre 2015 : low du fichier 1046.23 vs reference 1046 (ecart 0.02%)
 [  ok  ] Rebond post-Brexit : high du fichier 1375.05 vs reference 1375 (ecart 0.00%)
@@ -18,9 +18,9 @@ Audit de XAUUSDm15.csv
 [  ok  ] Sommet de septembre 2019 : high du fichier 1556.98 vs reference 1557 (ecart 0.00%)
 [  ok  ] Krach COVID de mars 2020 : low du fichier 1451.13 vs reference 1451 (ecart 0.01%)
 [  ok  ] Record du 7 aout 2020 : high du fichier 2074.87 vs reference 2075 (ecart 0.01%)
-[ passe] Pic du 8 mars 2022 (Ukraine) : hors de la periode couverte
-[ passe] Sommet de fin octobre 2024 : hors de la periode couverte
-      7 repere(s) confronte(s), tolerance 1.5%
+[  ok  ] Pic du 8 mars 2022 (Ukraine) : high du fichier 2070.30 vs reference 2070 (ecart 0.01%)
+[  ok  ] Sommet de fin octobre 2024 : high du fichier 2790.09 vs reference 2790 (ecart 0.00%)
+      10 repere(s) confronte(s), tolerance 1.5%
 
 --- Coherence des bougies ---
 [  ok  ] High >= Low : 0 violation(s)
@@ -30,6 +30,6 @@ Audit de XAUUSDm15.csv
 [  ok  ] Horodatages uniques : 0 doublon(s)
 [  ok  ] Horodatages tries par ordre croissant
 [  ok  ] Instrument forex/CFD (pas de week-end) : 0 bougie(s) samedi/dimanche (0.00%)
-[  ok  ] Plus grand ecart de cotation entre bougies : 1.95% le 2013-09-06 15:30:00
+[  ok  ] Plus grand ecart de cotation entre bougies : 2.76% le 2010-11-15 01:00:00
 
 Tous les controles passent : le fichier contient bien du XAUUSD exploitable.

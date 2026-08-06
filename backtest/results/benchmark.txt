@@ -1,24 +1,24 @@
-Periode : 2012-05-15 08:00:00 -> 2022-03-04 23:45:00 (230,400 bougies M15)
+Periode : 2006-11-27 01:00:00 -> 2025-03-21 22:45:00 (424,996 bougies M15)
 
 --- 1) Setups SMC vs entree aleatoire (R:R 1:3, frais reels) ---
-S2 POI Continuation                          n= 606 wr= 23.6% pf= 0.85 E=-0.134R ret=  -59.0% dd= 62.8%
-S3 Liquidity Sweep                           n= 536 wr= 20.3% pf= 0.72 E=-0.205R ret=  -69.1% dd= 71.0%
-Random (direction aleatoire)                 n= 741 wr= 24.0% pf= 0.79 E=-0.158R ret=  -72.2% dd= 74.8%
-Random (autre graine)                        n= 717 wr= 26.6% pf= 0.90 E=-0.063R ret=  -42.3% dd= 60.1%
-Random dans le sens du biais H4              n= 757 wr= 25.1% pf= 0.81 E=-0.129R ret=  -65.6% dd= 67.3%
-Random contre le biais H4                    n= 739 wr= 23.8% pf= 0.78 E=-0.166R ret=  -72.3% dd= 74.4%
+S2 POI Continuation                          n=1122 wr= 23.6% pf= 0.82 E=-0.147R ret=  -82.3% dd= 85.0%
+S3 Liquidity Sweep                           n= 957 wr= 21.6% pf= 0.80 E=-0.136R ret=  -77.0% dd= 82.4%
+Random (direction aleatoire)                 n=1351 wr= 25.2% pf= 0.79 E=-0.115R ret=  -81.7% dd= 85.1%
+Random (autre graine)                        n=1305 wr= 24.1% pf= 0.78 E=-0.154R ret=  -88.1% dd= 91.1%
+Random dans le sens du biais H4              n=1328 wr= 25.2% pf= 0.81 E=-0.117R ret=  -81.8% dd= 87.0%
+Random contre le biais H4                    n=1340 wr= 24.0% pf= 0.84 E=-0.152R ret=  -88.1% dd= 89.4%
 
 --- 2) Poids des frais (memes strategies, spread et commission a 0) ---
-S2 POI Continuation - sans frais             n= 606 wr= 23.8% pf= 0.90 E=-0.074R ret=  -42.7% dd= 56.4%
-S3 Liquidity Sweep - sans frais              n= 536 wr= 20.3% pf= 0.81 E=-0.133R ret=  -54.9% dd= 59.1%
-Random - sans frais                          n= 749 wr= 23.5% pf= 0.92 E=-0.060R ret=  -42.6% dd= 59.9%
+S2 POI Continuation - sans frais             n=1122 wr= 23.8% pf= 0.87 E=-0.095R ret=  -72.4% dd= 76.6%
+S3 Liquidity Sweep - sans frais              n= 953 wr= 21.6% pf= 0.90 E=-0.060R ret=  -52.0% dd= 70.4%
+Random - sans frais                          n=1334 wr= 25.0% pf= 0.97 E=-0.003R ret=  -22.4% dd= 60.2%
 
 --- 3) Sensibilite au R:R vise (frais reels) ---
-S3 - R:R min 1:1.5                           n= 598 wr= 31.6% pf= 0.81 E=-0.128R ret=  -56.7% dd= 59.2%
-S2 - R:R min 1:1.5                           n= 764 wr= 34.2% pf= 0.90 E=-0.063R ret=  -41.8% dd= 46.2%
-S3 - R:R min 1:2                             n= 577 wr= 27.2% pf= 0.81 E=-0.127R ret=  -55.2% dd= 59.4%
-S2 - R:R min 1:2                             n= 706 wr= 29.5% pf= 0.87 E=-0.088R ret=  -49.9% dd= 53.2%
-S3 - R:R min 1:3                             n= 536 wr= 20.3% pf= 0.72 E=-0.205R ret=  -69.1% dd= 71.0%
-S2 - R:R min 1:3                             n= 606 wr= 23.6% pf= 0.85 E=-0.134R ret=  -59.0% dd= 62.8%
-S3 - R:R min 1:5                             n= 478 wr= 15.9% pf= 0.76 E=-0.187R ret=  -63.1% dd= 67.2%
-S2 - R:R min 1:5                             n= 506 wr= 20.6% pf= 0.87 E=-0.100R ret=  -45.7% dd= 52.3%
+S3 - R:R min 1:1.5                           n=1058 wr= 31.1% pf= 0.78 E=-0.122R ret=  -74.2% dd= 78.7%
+S2 - R:R min 1:1.5                           n=1396 wr= 33.6% pf= 0.88 E=-0.083R ret=  -72.7% dd= 76.3%
+S3 - R:R min 1:2                             n=1020 wr= 27.0% pf= 0.80 E=-0.121R ret=  -73.9% dd= 78.5%
+S2 - R:R min 1:2                             n=1280 wr= 28.6% pf= 0.83 E=-0.118R ret=  -81.4% dd= 82.3%
+S3 - R:R min 1:3                             n= 957 wr= 21.6% pf= 0.80 E=-0.136R ret=  -77.0% dd= 82.4%
+S2 - R:R min 1:3                             n=1122 wr= 23.6% pf= 0.82 E=-0.147R ret=  -82.3% dd= 85.0%
+S3 - R:R min 1:5                             n= 857 wr= 17.5% pf= 0.88 E=-0.104R ret=  -65.7% dd= 76.8%
+S2 - R:R min 1:5                             n= 919 wr= 19.9% pf= 0.79 E=-0.155R ret=  -81.2% dd= 83.3%

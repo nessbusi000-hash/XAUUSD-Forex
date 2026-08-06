@@ -6,7 +6,11 @@ reglages coherents (R:R, killzones ICT, filtre Premium/Discount, prise
 partielle) tient hors echantillon.
 
     IS  : 2012-05 -> 2018-12   (choix des reglages)
-    OOS : 2019-01 -> 2022-03   (validation, jamais utilise pour choisir)
+    OOS : 2019-01 -> 2025-03   (validation, jamais utilise pour choisir)
+
+La fenetre IS est restee identique quand l'historique a ete etendu jusqu'en
+2025 : les reglages ont donc ete choisis avant que ces annees existent dans le
+projet, ce qui fait de 2022-2025 un vrai test en avant.
 
     python3 backtest/scan.py --strategy s3
 """
@@ -29,7 +33,7 @@ from smc import (  # noqa: E402
 
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "XAUUSDm15.csv")
 IS = ("2012-05-15", "2018-12-31")
-OOS = ("2019-01-01", "2022-03-05")
+OOS = ("2019-01-01", "2025-03-21")
 
 # Killzones ICT en heure serveur (donnees EET = UTC+2/+3) :
 # London 09h-12h, New York 14h-18h.
