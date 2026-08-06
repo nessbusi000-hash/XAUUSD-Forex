@@ -19,7 +19,9 @@ l'une, l'autre ou les deux) et le meme moteur Python de backtest.
 > Sur 18 ans (2006-2025), les strategies 2 et 3 sont perdantes de facon
 > statistiquement etablie (t = -3,0 et -2,4) et ne se distinguent pas d'entrees
 > aleatoires a R:R equivalent — y compris sur les trois annees inedites
-> 2022-2025. L'EA demarre donc en mode alerte (`InpEnableTrading = false`).
+> 2022-2025. La seule variante candidate n'a produit que 2 trades en 4 mois de
+> forward test : a sa cadence, il faudrait ~89 ans pour prouver son edge.
+> L'EA demarre donc en mode alerte (`InpEnableTrading = false`).
 
 ## Backtest et analyse
 
@@ -31,6 +33,7 @@ python3 backtest/run_backtest.py --strategy both --out backtest/results
 python3 backtest/analyze.py                                # briefing SMC en 4 etapes
 python3 backtest/benchmark.py                              # SMC vs entrees aleatoires
 python3 backtest/robustness.py                             # fenetres independantes + test t
+python3 backtest/forward_test.py                           # forward test sur source independante
 python3 backtest/scan.py --strategy s3                     # etude in-sample / out-of-sample
 python3 backtest/verify_data.py                            # audit des donnees (authenticite + coherence)
 ```
@@ -48,6 +51,7 @@ backtest/analyze.py         briefing SMC/ICT en 4 etapes
 backtest/benchmark.py       comparaison avec des entrees aleatoires
 backtest/scan.py            balayage parametrique in-sample / out-of-sample
 backtest/robustness.py      tenue sur fenetres independantes + significativite (test t)
+backtest/forward_test.py    forward test post-selection sur une source de donnees independante
 backtest/prepare_data.py    fusion des sources brutes en historique M15 canonique
 backtest/verify_data.py     audit du fichier de donnees (reperes de marche + coherence)
 backtest/tests/test_smc.py  tests unitaires

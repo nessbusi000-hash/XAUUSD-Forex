@@ -72,6 +72,10 @@ class ExecConfig:
     be_on_partial: bool = True  # SL au point mort apres la partielle
     min_sl_dollars: float = 1.0
     max_sl_dollars: float = 60.0
+    # Date a partir de laquelle les signaux sont pris. Les bougies anterieures
+    # alimentent quand meme les contextes : c'est la periode de chauffe, qui
+    # donne au moteur sa structure et ses POI sans generer de trades.
+    trade_from: object = None
 
 
 class Backtester:
@@ -106,6 +110,7 @@ class Backtester:
         htf_bars = resample(m15, self.htf_name)
         mtf_bars = resample(m15, self.mtf_name)
         h_ptr = m_ptr = 0
+        cfg = self.cfg
 
         for i in range(len(m15)):
             now = m15.close_time[i]
@@ -131,7 +136,9 @@ class Backtester:
 
             self.ctx_ltf.on_bar(m15.open[i], hi, lo, cl, m15.time[i])
 
-            # 3) Recherche de signal a la cloture.
+            # 3) Recherche de signal a la cloture (hors periode de chauffe).
+            if cfg.trade_from is not None and m15.time[i] < cfg.trade_from:
+                continue
             if self.open_trade is None:
                 sig = self.strategy.on_bar(i, self.ctx_ltf, self.ctx_mtf, self.ctx_htf, m15)
                 if sig is not None:

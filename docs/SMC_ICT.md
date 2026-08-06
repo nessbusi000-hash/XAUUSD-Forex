@@ -91,6 +91,9 @@ python3 backtest/scan.py --strategy s3
 
 # 6. Tenue sur fenetres independantes et significativite statistique
 python3 backtest/robustness.py
+
+# 7. Forward test post-selection, sur une source de donnees independante
+python3 backtest/forward_test.py
 ```
 
 L'EA MetaTrader 4 correspondant est `strategies/SMC_ICT_EA.mq4`

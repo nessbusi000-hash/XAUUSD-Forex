@@ -58,7 +58,8 @@ class Series:
 TIME_ALIASES = ("date", "time", "datetime", "timestamp", "gmt time", "local time")
 VOLUME_ALIASES = ("tick_volume", "volume", "vol", "tickvol")
 DATE_FORMATS = ("%Y.%m.%d %H:%M", "%Y.%m.%d %H:%M:%S", "%Y-%m-%d %H:%M",
-                "%Y-%m-%d %H:%M:%S", "%d/%m/%Y %H:%M", "%d.%m.%Y %H:%M")
+                "%Y-%m-%d %H:%M:%S", "%Y%m%d %H:%M:%S", "%Y%m%d %H:%M",
+                "%d/%m/%Y %H:%M", "%d.%m.%Y %H:%M")
 
 
 def load_csv(path: str, tf: str = "M15") -> Series:
@@ -66,6 +67,11 @@ def load_csv(path: str, tf: str = "M15") -> Series:
     le format de date : les exports MetaTrader varient d'une source a l'autre."""
     df = pd.read_csv(path, sep=None, engine="python")
     df.columns = [str(c).strip().lower() for c in df.columns]
+
+    # Certains exports separent la date et l'heure en deux colonnes.
+    if "date" in df.columns and "time" in df.columns:
+        df["date"] = df["date"].astype(str).str.strip() + " " + df["time"].astype(str).str.strip()
+        df = df.drop(columns=["time"])
 
     time_col = next((c for c in df.columns if c in TIME_ALIASES), None)
     if time_col is None:
@@ -92,6 +98,17 @@ def load_csv(path: str, tf: str = "M15") -> Series:
             df[col] = df[col] / 100.0
 
     return _to_series(df, tf)
+
+
+def series_from_frame(df: pd.DataFrame, tf: str = "M15") -> Series:
+    """Construit une Series a partir d'un DataFrame indexe par le temps.
+
+    Colonnes attendues : open, high, low, close (volume optionnel)."""
+    out = df.reset_index()
+    out = out.rename(columns={out.columns[0]: "time"})
+    if "volume" not in out.columns:
+        out["volume"] = 0.0
+    return _to_series(out.sort_values("time").reset_index(drop=True), tf)
 
 
 def _parse_times(col: pd.Series) -> pd.Series:
