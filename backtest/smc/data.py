@@ -55,16 +55,51 @@ class Series:
         return len(self.time)
 
 
-def load_csv(path: str, tf: str = "M15") -> Series:
-    df = pd.read_csv(path, parse_dates=["Date"])
-    df = df.rename(columns={"Date": "time", "tick_volume": "volume"})
-    df = df.dropna().sort_values("time").reset_index(drop=True)
+TIME_ALIASES = ("date", "time", "datetime", "timestamp", "gmt time", "local time")
+VOLUME_ALIASES = ("tick_volume", "volume", "vol", "tickvol")
+DATE_FORMATS = ("%Y.%m.%d %H:%M", "%Y.%m.%d %H:%M:%S", "%Y-%m-%d %H:%M",
+                "%Y-%m-%d %H:%M:%S", "%d/%m/%Y %H:%M", "%d.%m.%Y %H:%M")
 
-    if df["close"].median() > 20000:  # prix en centiemes
+
+def load_csv(path: str, tf: str = "M15") -> Series:
+    """Charge un CSV OHLC. Tolerant sur le separateur, les noms de colonnes et
+    le format de date : les exports MetaTrader varient d'une source a l'autre."""
+    df = pd.read_csv(path, sep=None, engine="python")
+    df.columns = [str(c).strip().lower() for c in df.columns]
+
+    time_col = next((c for c in df.columns if c in TIME_ALIASES), None)
+    if time_col is None:
+        raise ValueError(f"{path} : aucune colonne de date reconnue parmi {list(df.columns)}")
+    vol_col = next((c for c in df.columns if c in VOLUME_ALIASES), None)
+
+    rename = {time_col: "time"}
+    if vol_col:
+        rename[vol_col] = "volume"
+    df = df.rename(columns=rename)
+
+    missing = {"open", "high", "low", "close"} - set(df.columns)
+    if missing:
+        raise ValueError(f"{path} : colonnes OHLC manquantes {sorted(missing)}")
+    if "volume" not in df.columns:
+        df["volume"] = 0.0
+
+    df["time"] = _parse_times(df["time"])
+    df = df[["time", "open", "high", "low", "close", "volume"]]
+    df = df.dropna().drop_duplicates("time").sort_values("time").reset_index(drop=True)
+
+    if df["close"].median() > 20000:  # prix exprimes en centiemes
         for col in ("open", "high", "low", "close"):
             df[col] = df[col] / 100.0
 
     return _to_series(df, tf)
+
+
+def _parse_times(col: pd.Series) -> pd.Series:
+    for fmt in DATE_FORMATS:
+        parsed = pd.to_datetime(col, format=fmt, errors="coerce")
+        if parsed.notna().mean() > 0.99:
+            return parsed
+    return pd.to_datetime(col, errors="coerce")
 
 
 def resample(src: Series, tf: str) -> Series:

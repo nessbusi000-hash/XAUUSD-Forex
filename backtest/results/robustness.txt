@@ -1,0 +1,26 @@
+
+=== S2 reglages par defaut ===
+  2006-11-27 -> 2012-05-14  inedite (anterieure a l'etude)   n= 309 wr= 24.6% pf= 0.82 E=-0.134R ret=  -36.1% dd= 40.2%
+  2012-05-15 -> 2018-12-31  in-sample (choix des reglages)   n= 403 wr= 25.6% pf= 0.95 E=-0.021R ret=  -13.8% dd= 24.8%
+  2019-01-01 -> 2022-03-04  out-of-sample 1                  n= 197 wr= 20.3% pf= 0.56 E=-0.349R ret=  -50.4% dd= 51.9%
+  2022-03-05 -> 2025-03-21  inedite (posterieure a l'etude)  n= 193 wr= 23.8% pf= 0.77 E=-0.151R ret=  -27.4% dd= 35.1%
+  periode complete                                         n=1122 wr= 23.6% pf= 0.82 E=-0.147R ret=  -82.3% dd= 85.0%
+  test t sur l'esperance : E=-0.147R, ecart-type=1.64, n=1122 -> t=-3.01 (significatif au seuil de 5%)
+
+=== S3 candidate (rr=4, Premium/Discount, pools=3, window=12) ===
+  2006-11-27 -> 2012-05-14  inedite (anterieure a l'etude)   n=  58 wr= 22.4% pf= 0.96 E=-0.009R ret=   -2.1% dd=  9.4%
+  2012-05-15 -> 2018-12-31  in-sample (choix des reglages)   n= 112 wr= 22.3% pf= 1.04 E=+0.053R ret=   +3.4% dd= 18.2%
+  2019-01-01 -> 2022-03-04  out-of-sample 1                  n=  60 wr= 28.3% pf= 1.20 E=+0.180R ret=  +10.1% dd= 12.2%
+  2022-03-05 -> 2025-03-21  inedite (posterieure a l'etude)  n=  60 wr= 23.3% pf= 1.27 E=+0.221R ret=  +12.8% dd= 12.1%
+  periode complete                                         n= 287 wr= 24.0% pf= 1.13 E=+0.114R ret=  +31.5% dd= 22.1%
+  test t sur l'esperance : E=+0.114R, ecart-type=2.13, n=287 -> t=+0.91 (INDISCERNABLE DE ZERO au seuil de 5%)
+
+=== S3 reglages par defaut ===
+  2006-11-27 -> 2012-05-14  inedite (anterieure a l'etude)   n= 235 wr= 22.6% pf= 0.85 E=-0.111R ret=  -25.2% dd= 37.6%
+  2012-05-15 -> 2018-12-31  in-sample (choix des reglages)   n= 342 wr= 20.2% pf= 0.71 E=-0.205R ret=  -52.1% dd= 54.9%
+  2019-01-01 -> 2022-03-04  out-of-sample 1                  n= 191 wr= 20.9% pf= 0.75 E=-0.193R ret=  -33.7% dd= 42.1%
+  2022-03-05 -> 2025-03-21  inedite (posterieure a l'etude)  n= 189 wr= 23.8% pf= 0.99 E=+0.013R ret=   -0.9% dd= 18.9%
+  periode complete                                         n= 957 wr= 21.6% pf= 0.80 E=-0.136R ret=  -77.0% dd= 82.4%
+  test t sur l'esperance : E=-0.136R, ecart-type=1.73, n=957 -> t=-2.44 (significatif au seuil de 5%)
+
+Rappel : |t| < 2 signifie que le resultat est compatible avec le hasard.

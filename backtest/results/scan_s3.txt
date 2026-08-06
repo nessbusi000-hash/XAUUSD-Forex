@@ -1,15 +1,15 @@
 === IN-SAMPLE 2012-05-15 -> 2018-12-31 (124/144 configs retenues) ===
-min_rr=4.0 htf_filter=bias pool_count=2 window=12 session=all partial=False    n= 324 wr= 22.5% pf= 1.08 E=+0.078R ret=  +19.7% dd= 36.5%
+min_rr=4.0 htf_filter=bias pool_count=2 window=12 session=all partial=False    n= 324 wr= 22.2% pf= 1.05 E=+0.059R ret=  +12.9% dd= 40.1%
 min_rr=4.0 htf_filter=premium_discount pool_count=3 window=12 session=all partial=False n= 112 wr= 22.3% pf= 1.04 E=+0.053R ret=   +3.4% dd= 18.2%
 min_rr=4.0 htf_filter=none pool_count=2 window=12 session=all partial=False    n= 544 wr= 22.1% pf= 1.04 E=+0.052R ret=  +19.1% dd= 36.7%
-min_rr=3.0 htf_filter=bias pool_count=2 window=12 session=all partial=False    n= 358 wr= 25.1% pf= 1.03 E=+0.038R ret=   +8.7% dd= 39.8%
 min_rr=2.0 htf_filter=bias pool_count=3 window=8 session=all partial=True      n= 102 wr= 51.0% pf= 1.06 E=+0.033R ret=   +3.0% dd= 11.3%
-min_rr=3.0 htf_filter=bias pool_count=3 window=8 session=all partial=True      n=  98 wr= 50.0% pf= 1.06 E=+0.033R ret=   +2.8% dd= 12.6%
+min_rr=3.0 htf_filter=bias pool_count=3 window=8 session=all partial=True      n=  98 wr= 50.0% pf= 1.05 E=+0.031R ret=   +2.6% dd= 12.6%
+min_rr=2.0 htf_filter=premium_discount pool_count=3 window=12 session=killzone partial=False n=  60 wr= 31.7% pf= 1.03 E=+0.028R ret=   +1.5% dd= 14.5%
 
-=== OUT-OF-SAMPLE 2019-01-01 -> 2022-03-05 (memes reglages) ===
-min_rr=4.0 htf_filter=bias pool_count=2 window=12 session=all partial=False    n= 166 wr= 17.5% pf= 0.74 E=-0.208R ret=  -30.8% dd= 36.0%
-min_rr=4.0 htf_filter=premium_discount pool_count=3 window=12 session=all partial=False n=  60 wr= 28.3% pf= 1.20 E=+0.180R ret=  +10.1% dd= 12.2%
-min_rr=4.0 htf_filter=none pool_count=2 window=12 session=all partial=False    n= 269 wr= 19.7% pf= 0.84 E=-0.125R ret=  -32.2% dd= 43.4%
-min_rr=3.0 htf_filter=bias pool_count=2 window=12 session=all partial=False    n= 183 wr= 18.0% pf= 0.66 E=-0.265R ret=  -39.8% dd= 42.7%
-min_rr=2.0 htf_filter=bias pool_count=3 window=8 session=all partial=True      n=  37 wr= 51.4% pf= 0.87 E=-0.060R ret=   -2.4% dd=  8.0%
-min_rr=3.0 htf_filter=bias pool_count=3 window=8 session=all partial=True      n=  36 wr= 52.8% pf= 0.84 E=-0.073R ret=   -2.7% dd=  8.4%
+=== OUT-OF-SAMPLE 2019-01-01 -> 2025-03-21 (memes reglages) ===
+min_rr=4.0 htf_filter=bias pool_count=2 window=12 session=all partial=False    n= 321 wr= 19.3% pf= 0.87 E=-0.084R ret=  -27.8% dd= 43.4%
+min_rr=4.0 htf_filter=premium_discount pool_count=3 window=12 session=all partial=False n= 119 wr= 26.1% pf= 1.24 E=+0.211R ret=  +24.9% dd= 14.5%
+min_rr=4.0 htf_filter=none pool_count=2 window=12 session=all partial=False    n= 544 wr= 21.5% pf= 0.95 E=-0.012R ret=  -17.4% dd= 44.9%
+min_rr=2.0 htf_filter=bias pool_count=3 window=8 session=all partial=True      n=  90 wr= 47.8% pf= 0.89 E=-0.052R ret=   -5.2% dd= 12.9%
+min_rr=3.0 htf_filter=bias pool_count=3 window=8 session=all partial=True      n=  86 wr= 50.0% pf= 0.95 E=-0.017R ret=   -2.4% dd= 11.4%
+min_rr=2.0 htf_filter=premium_discount pool_count=3 window=12 session=killzone partial=False n=  67 wr= 32.8% pf= 1.09 E=+0.077R ret=   +4.5% dd= 16.8%
