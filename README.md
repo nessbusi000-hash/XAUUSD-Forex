@@ -25,6 +25,7 @@ l'une, l'autre ou les deux) et le meme moteur Python de backtest.
 ```bash
 ./backtest/fetch_data.sh                                   # historique XAUUSD M15 2012-2022
 python3 -m pip install pandas                              # seule dependance
+python3 backtest/verify_data.py                            # audit des donnees (authenticite + coherence)
 python3 backtest/tests/test_smc.py                         # tests du moteur
 python3 backtest/run_backtest.py --strategy both --out backtest/results
 python3 backtest/analyze.py                                # briefing SMC en 4 etapes
@@ -44,6 +45,7 @@ backtest/run_backtest.py    lancement d'un backtest
 backtest/analyze.py         briefing SMC/ICT en 4 etapes
 backtest/benchmark.py       comparaison avec des entrees aleatoires
 backtest/scan.py            balayage parametrique in-sample / out-of-sample
+backtest/verify_data.py     audit du fichier de donnees (reperes de marche + coherence)
 backtest/tests/test_smc.py  tests unitaires
 backtest/results/           rapports et journaux de trades
 docs/                       methodologie et resultats

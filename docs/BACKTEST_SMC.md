@@ -15,7 +15,7 @@ python3 backtest/scan.py --strategy s3
 | Parametre | Valeur |
 |---|---|
 | Actif | XAUUSD, M15 (execution) / H1 (intermediaire) / H4 (biais) |
-| Donnees | 230 400 bougies M15, 2012-05-15 -> 2022-03-04 (~9,8 ans), export MetaTrader (heure serveur EET) |
+| Donnees | 230 400 bougies M15, 2012-05-15 -> 2022-03-04 (~9,8 ans), export MetaTrader (heure serveur EET) — authenticite verifiee, voir ci-dessous |
 | Capital | 10 000 $, risque 1% par trade, 1 position a la fois |
 | Frais | spread 0,30 $ paye en entier a l'entree + 7 $/lot de commission aller-retour |
 | Execution | signal a la cloture de la bougie M15, execution a ce prix ; SL prioritaire sur TP si les deux sont dans la meme bougie |
@@ -24,6 +24,34 @@ python3 backtest/scan.py --strategy s3
 Le moteur est couvert par `backtest/tests/test_smc.py` (7 groupes de tests :
 structure, FVG, liquidite, taille de position, P&L, priorite du SL, spread,
 prise partielle).
+
+## Authenticite des donnees (`backtest/verify_data.py`)
+
+Le dataset source est etiquete « Major Forex historical data ». XAU/USD *est*
+une paire forex (l'once d'or contre le dollar, tradee en CFD chez les brokers
+MT4/MT5), mais le fichier a ete confronte aux repere connus du marche de l'or —
+`python3 backtest/verify_data.py`, sortie complete dans
+[`backtest/results/verify_data.txt`](../backtest/results/verify_data.txt) :
+
+| Repere | Fichier | Marche | Ecart |
+|---|---|---|---|
+| Krach des 12-15 avril 2013 | 1321,54 | ~1321 | 0,04% |
+| Plus bas du cycle, 3 dec. 2015 | 1046,23 | ~1046 | 0,02% |
+| Rebond post-Brexit, juillet 2016 | 1375,05 | ~1375 | 0,00% |
+| Creux d'aout 2018 | 1160,07 | ~1160 | 0,01% |
+| Sommet de septembre 2019 | 1556,98 | ~1557 | 0,00% |
+| Krach COVID, mars 2020 | 1451,13 | ~1451 | 0,01% |
+| Record du 7 aout 2020 | 2074,87 | ~2075 | 0,01% |
+
+Le script controle aussi la coherence des bougies (High/Low englobant
+Open/Close, horodatages uniques et tries, absence de bougies le week-end —
+signature d'un instrument forex/CFD, sauts de cotation aberrants). Il renvoie 1
+en cas d'echec, ce qui permet de l'utiliser comme garde-fou avant tout backtest
+sur une nouvelle source de donnees.
+
+Ce sont des cotations **bid d'un broker CFD**, pas le fixing spot de Londres :
+c'est exactement ce que tradera l'EA sur MT4, mais les prix peuvent differer de
+quelques dizaines de cents d'un broker a l'autre.
 
 ## Resultats — reglages par defaut, periode complete
 
