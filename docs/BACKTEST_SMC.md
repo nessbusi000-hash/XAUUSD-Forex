@@ -7,6 +7,7 @@ Resultats **mesures**, pas estimes. Tout est reproductible :
 python3 backtest/run_backtest.py --strategy both --out backtest/results
 python3 backtest/benchmark.py            # SMC vs entrees aleatoires
 python3 backtest/robustness.py           # fenetres independantes + test t
+python3 backtest/forward_test.py         # forward test sur source independante
 python3 backtest/scan.py --strategy s3   # balayage parametrique IS / OOS
 ```
 
@@ -183,6 +184,52 @@ l'issue attendue. Ce qui la rend interessante, c'est la coherence du classement
 significativite, qui n'est pas atteinte. Statut : **candidate a surveiller**,
 pas strategie validee.
 
+## Forward test de la configuration candidate (`backtest/forward_test.py`)
+
+La candidate a ete retenue sur un historique s'arretant au **21 mars 2025**.
+Elle a ensuite ete rejouee sur des bougies posterieures a cette date, issues
+d'une **source independante** obtenue apres coup —
+[ilahuerta-IA/backtrader-pullback-window-xauusd](https://github.com/ilahuerta-IA/backtrader-pullback-window-xauusd)
+(`XAUUSD_5m_5Yea.csv`, bougies 5 min en UTC, converties vers l'heure serveur
+EET/EEST ; ecart median residuel de 0,11 $ contre notre flux, soit la difference
+normale entre deux brokers).
+
+L'historique du projet sert de periode de chauffe — structure, POI et poches de
+liquidite sont alimentes, mais aucun trade n'y est compte (`ExecConfig.trade_from`).
+
+Fenetre : **2025-03-24 -> 2025-08-01**, 130 jours, 8 612 bougies M15.
+
+| Strategie | Trades attendus | Trades observes | Win rate | PF | Esperance | Reference 2006-2025 |
+|---|---|---|---|---|---|---|
+| #3 candidate | ~5,6 | **2** | 100% | inf | +4,144 R | +0,114 R |
+| #3 par defaut | ~18,6 | 21 | 29% | 1,38 | +0,243 R | -0,136 R |
+| #2 par defaut | ~21,8 | 26 | 15% | 0,50 | -0,369 R | -0,147 R |
+
+**Rien de concluant, et c'est le resultat le plus utile.** La candidate n'a
+declenche que 2 trades en quatre mois — deux gagnants, mais deux trades ne
+disent rien. Les reglages par defaut, eux, partent dans des directions
+opposees sur la meme fenetre : la #3 ressort positive (+0,243 R alors qu'elle
+vaut -0,136 R sur 18 ans) et la #2 nettement pire que son historique. Une
+fenetre de quatre mois est domine par le bruit, exactement comme le benchmark
+aleatoire le laissait prevoir.
+
+### Combien de temps faudrait-il pour trancher ?
+
+Avec l'esperance et la dispersion mesurees sur 18 ans, le nombre de trades
+necessaire pour atteindre `|t| = 2` :
+
+| Strategie | Trades requis | A la cadence observee |
+|---|---|---|
+| #3 candidate (E=+0,114 R, ecart-type 2,13) | 1 396 | **88,9 ans** |
+| #3 par defaut (E=-0,136 R, ecart-type 1,73) | 647 | 12,4 ans |
+| #2 par defaut (E=-0,147 R, ecart-type 1,64) | 498 | 8,1 ans |
+
+C'est la conclusion pratique : meme si l'edge de la candidate etait reel, il est
+**indetectable a l'echelle d'une vie de trading** a 16 trades par an. Le
+protocole ne peut pas la valider ; seule une augmentation massive de la
+frequence (autres actifs, timeframe inferieur, regles moins restrictives)
+rendrait la question decidable.
+
 ## Limites connues
 
 1. **Donnees** : un seul broker, prix bid uniquement, spread suppose constant a
@@ -209,9 +256,11 @@ strategies #2 et #3 sont perdants de facon statistiquement etablie**, et ne se
 distinguent pas d'entrees aleatoires a R:R equivalent.
 
 La seule piste non refutee est la #3 filtree par Premium/Discount sur des
-clusters de 3 sommets, positive sur quatre fenetres consecutives mais sans
-significativite statistique. Avec ~16 trades par an, il faudrait plusieurs
-annees de forward test pour trancher — c'est precisement pour cela que l'EA
+clusters de 3 sommets, positive sur quatre fenetres consecutives puis sur un
+forward test de quatre mois (2 trades, 2 gagnants) — mais sans significativite
+statistique, et le calcul de puissance donne **89 ans** de trading avant de
+pouvoir trancher a sa cadence. Autrement dit : cette piste n'est pas
+verifiable en pratique telle quelle. C'est precisement pour cela que l'EA
 demarre en mode alerte.
 
 Pistes qui restent a tester avec ce meme protocole : entree limite au 50% de

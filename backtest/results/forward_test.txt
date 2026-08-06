@@ -1,0 +1,86 @@
+================================================================================================
+FORWARD TEST - XAUUSD
+  Chauffe (aucun trade compte) : 2006-11-27 01:00:00 -> 2025-03-21 23:59:00   424,996 bougies
+  Fenetre de forward           : 2025-03-24 00:00:00 -> 2025-08-01 23:45:00   8,612 bougies (130 jours)
+  Source du forward            : XAUUSD_5m_forward.csv (5 min, UTC -> Europe/Athens)
+================================================================================================
+
+--- #3 candidate (rr=4, Premium/Discount, pools=3, window=12) ---
+  Trades attendus sur 130 jours (cadence historique) : ~5.6
+  Trades observes : 2 | win rate 100% | PF inf | esperance +4.144 R | resultat +8.7%
+  Reference historique 2006-2025 : esperance +0.114 R
+  Journal :
+    2025-04-09 14:15:00  BUY  entree  3060.41  SL  3033.45  TP  3167.55  -> TP        +3.97 R  ( +428.28 $)
+    2025-07-23 04:00:00  SELL entree  3425.38  SL  3439.91  TP  3362.59  -> TP        +4.32 R  ( +439.04 $)
+
+--- #3 reglages par defaut ---
+  Trades attendus sur 130 jours (cadence historique) : ~18.6
+  Trades observes : 21 | win rate 29% | PF 1.38 | esperance +0.243 R | resultat +5.6%
+  Reference historique 2006-2025 : esperance -0.136 R
+  Test t sur la fenetre : t = +0.55 (non significatif — n=21, trop peu pour conclure)
+  Journal :
+    2025-04-08 07:45:00  BUY  entree  3002.21  SL  2988.68  TP  3045.97  -> SL        -1.01 R  (  -95.19 $)
+    2025-04-09 14:15:00  BUY  entree  3060.41  SL  3033.45  TP  3152.10  -> TP        +3.40 R  ( +366.48 $)
+    2025-04-29 16:00:00  BUY  entree  3316.21  SL  3298.45  TP  3370.07  -> SL        -1.00 R  ( -106.98 $)
+    2025-05-06 14:30:00  SELL entree  3374.00  SL  3386.36  TP  3321.11  -> SL        -1.01 R  (  -99.47 $)
+    2025-05-06 17:15:00  SELL entree  3383.36  SL  3400.14  TP  3321.11  -> SL        -1.00 R  ( -101.09 $)
+    2025-05-14 19:45:00  BUY  entree  3188.52  SL  3171.12  TP  3243.49  -> SL        -1.00 R  ( -104.82 $)
+    2025-05-20 04:00:00  BUY  entree  3228.12  SL  3212.61  TP  3284.51  -> SL        -1.00 R  (  -93.47 $)
+    2025-05-23 05:15:00  SELL entree  3293.65  SL  3310.60  TP  3232.61  -> SL        -1.00 R  ( -102.11 $)
+    2025-05-26 15:15:00  SELL entree  3326.25  SL  3335.89  TP  3290.60  -> SL        -1.01 R  (  -97.06 $)
+    2025-06-05 05:00:00  SELL entree  3369.94  SL  3385.44  TP  3302.95  -> SL        -1.00 R  (  -93.45 $)
+    2025-06-06 11:15:00  BUY  entree  3364.00  SL  3351.11  TP  3403.18  -> SL        -1.01 R  (  -90.69 $)
+    2025-06-23 15:15:00  SELL entree  3361.86  SL  3383.45  TP  3293.20  -> SL        -1.00 R  (  -86.64 $)
+    2025-06-26 05:30:00  BUY  entree  3340.02  SL  3327.88  TP  3381.90  -> SL        -1.01 R  (  -97.70 $)
+    2025-07-02 04:30:00  SELL entree  3332.70  SL  3346.12  TP  3292.07  -> SL        -1.01 R  (  -94.43 $)
+    2025-07-04 10:15:00  SELL entree  3336.94  SL  3345.73  TP  3311.22  -> TP        +2.92 R  ( +256.50 $)
+    2025-07-08 02:45:00  SELL entree  3334.10  SL  3346.50  TP  3296.20  -> TP        +3.05 R  ( +302.64 $)
+    2025-07-09 05:00:00  SELL entree  3300.54  SL  3308.83  TP  3274.41  -> SL        -1.01 R  ( -100.35 $)
+    2025-07-16 13:00:00  SELL entree  3337.59  SL  3343.54  TP  3320.05  -> TP        +2.94 R  ( +279.52 $)
+    2025-07-22 02:30:00  SELL entree  3393.70  SL  3403.17  TP  3362.59  -> SL        -1.01 R  (  -95.40 $)
+    2025-07-23 04:00:00  SELL entree  3425.38  SL  3439.91  TP  3362.59  -> TP        +4.32 R  ( +439.04 $)
+    2025-08-01 11:45:00  BUY  entree  3294.39  SL  3283.89  TP  3331.72  -> TP        +3.55 R  ( +372.60 $)
+
+--- #2 reglages par defaut ---
+  Trades attendus sur 130 jours (cadence historique) : ~21.8
+  Trades observes : 26 | win rate 15% | PF 0.50 | esperance -0.369 R | resultat -10.0%
+  Reference historique 2006-2025 : esperance -0.147 R
+  Test t sur la fenetre : t = -1.25 (non significatif — n=26, trop peu pour conclure)
+  Journal :
+    2025-03-24 02:45:00  SELL entree  3018.06  SL  3028.34  TP  2984.80  -> SL        -1.01 R  ( -103.47 $)
+    2025-03-24 15:30:00  SELL entree  3021.27  SL  3028.92  TP  2997.70  -> SL        -1.01 R  ( -100.32 $)
+    2025-03-25 20:15:00  SELL entree  3018.38  SL  3035.30  TP  2939.27  -> SL        -1.00 R  ( -101.93 $)
+    2025-04-08 12:15:00  SELL entree  2995.36  SL  3018.40  TP  2905.97  -> SL        -1.00 R  (  -92.44 $)
+    2025-04-08 18:45:00  SELL entree  3000.98  SL  3059.38  TP  2807.19  -> SL        -1.00 R  ( -116.95 $)
+    2025-04-15 08:30:00  SELL entree  3221.77  SL  3247.36  TP  3116.07  -> SL        -1.00 R  ( -102.65 $)
+    2025-04-23 03:15:00  BUY  entree  3350.94  SL  3318.57  TP  3449.47  -> SL        -1.00 R  (  -97.32 $)
+    2025-04-23 11:45:00  BUY  entree  3321.60  SL  3281.59  TP  3449.47  -> SL        -1.00 R  (  -80.16 $)
+    2025-04-23 19:30:00  BUY  entree  3298.27  SL  3252.13  TP  3438.82  -> time_stop -0.49 R  (  -45.66 $)
+    2025-05-02 15:30:00  SELL entree  3255.38  SL  3285.54  TP  3151.39  -> SL        -1.00 R  (  -90.69 $)
+    2025-05-08 18:15:00  SELL entree  3346.42  SL  3383.54  TP  3222.39  -> TP        +3.34 R  ( +247.92 $)
+    2025-05-14 14:45:00  SELL entree  3219.69  SL  3260.31  TP  2969.61  -> SL        -1.00 R  (  -81.38 $)
+    2025-05-28 06:15:00  SELL entree  3293.40  SL  3333.37  TP  3153.47  -> SL        -1.00 R  (  -80.09 $)
+    2025-06-05 22:15:00  BUY  entree  3357.81  SL  3336.64  TP  3437.66  -> SL        -1.00 R  (  -84.98 $)
+    2025-06-09 13:30:00  SELL entree  3312.36  SL  3345.18  TP  3204.20  -> SL        -1.00 R  (  -98.66 $)
+    2025-06-10 18:00:00  SELL entree  3325.25  SL  3346.66  TP  3245.20  -> SL        -1.00 R  (  -85.93 $)
+    2025-06-11 16:45:00  SELL entree  3329.30  SL  3378.65  TP  3153.47  -> SL        -1.00 R  (  -98.84 $)
+    2025-06-17 17:30:00  SELL entree  3375.05  SL  3406.62  TP  3271.09  -> time_stop +1.64 R  ( +155.10 $)
+    2025-06-26 13:45:00  BUY  entree  3343.35  SL  3327.38  TP  3393.35  -> SL        -1.00 R  (  -96.24 $)
+    2025-07-04 08:30:00  SELL entree  3338.71  SL  3351.24  TP  3301.84  -> TP        +2.94 R  ( +257.60 $)
+    2025-07-08 02:45:00  SELL entree  3334.10  SL  3351.49  TP  3277.72  -> SL        -1.00 R  (  -87.29 $)
+    2025-07-16 05:00:00  SELL entree  3328.30  SL  3347.52  TP  3259.20  -> SL        -1.00 R  (  -96.47 $)
+    2025-07-18 06:15:00  SELL entree  3334.63  SL  3346.14  TP  3282.43  -> SL        -1.01 R  (  -92.60 $)
+    2025-07-21 06:45:00  SELL entree  3350.73  SL  3366.96  TP  3282.43  -> SL        -1.00 R  (  -81.52 $)
+    2025-07-24 19:15:00  SELL entree  3369.43  SL  3378.72  TP  3331.64  -> TP        +4.06 R  ( +339.48 $)
+    2025-07-29 14:00:00  SELL entree  3319.25  SL  3345.82  TP  3204.20  -> SL        -1.00 R  (  -79.93 $)
+
+================================================================================================
+COMBIEN DE TEMPS FAUDRAIT-IL POUR TRANCHER ?
+  Nombre de trades necessaires pour atteindre |t| = 2, en supposant que
+  l'esperance et la dispersion historiques se maintiennent :
+    #3 candidate (rr=4, Premium/Discount, pools=3, window=12) n =   1396 trades  ->  88.9 ans a la cadence observee
+    #3 reglages par defaut                               n =    647 trades  ->  12.4 ans a la cadence observee
+    #2 reglages par defaut                               n =    498 trades  ->   8.1 ans a la cadence observee
+
+Un forward test de quelques mois ne valide ni n'invalide une strategie a ~16
+trades par an : il sert a verifier qu'elle se comporte comme prevu, pas a trancher.
