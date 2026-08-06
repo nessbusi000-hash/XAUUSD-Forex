@@ -94,6 +94,10 @@ python3 backtest/robustness.py
 
 # 7. Forward test post-selection, sur une source de donnees independante
 python3 backtest/forward_test.py
+
+# 8. Frequence des signaux et generalisation a 12 instruments
+python3 backtest/frequency.py
+python3 backtest/multi_asset.py
 ```
 
 L'EA MetaTrader 4 correspondant est `strategies/SMC_ICT_EA.mq4`
@@ -105,6 +109,7 @@ defaut : mode alerte uniquement).
 Les resultats mesures sont dans **[BACKTEST_SMC.md](BACKTEST_SMC.md)** — a lire
 avant toute mise en production : sur XAUUSD 2006-2025 (18 ans, 424 996 bougies),
 **les deux strategies sont perdantes** avec une significativite statistique
-etablie, et ne se distinguent pas d'entrees aleatoires a R:R equivalent. Seule
-la #3 filtree par Premium/Discount sur des clusters de 3 sommets reste positive
-sur quatre fenetres consecutives, sans atteindre le seuil de significativite.
+etablie, et ne se distinguent pas d'entrees aleatoires a R:R equivalent. La #3
+filtree par Premium/Discount sur des clusters de 3 sommets, qui resistait sur
+quatre fenetres de XAUUSD, ressort a -0,097 R (t = -2,80) une fois portee sur
+12 instruments : son edge etait propre a l'or.

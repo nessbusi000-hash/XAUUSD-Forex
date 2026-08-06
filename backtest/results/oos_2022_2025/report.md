@@ -12,24 +12,24 @@
 |---|---|
 | Trades | 193 (64/an) |
 | Win rate | 23.8% |
-| Profit factor | 0.77 |
-| Esperance | -0.151 R / trade |
-| Gain moyen | +2.50 R |
-| Perte moyenne | -0.98 R |
-| Profit net | -2,744 $ (-27.4%) |
-| CAGR | -10.0% |
-| Equity finale | 7,256 $ |
-| Max drawdown | 3,682 $ (35.1%) |
+| Profit factor | 0.75 |
+| Esperance | -0.167 R / trade |
+| Gain moyen | +2.46 R |
+| Perte moyenne | -0.99 R |
+| Profit net | -2,921 $ (-29.2%) |
+| CAGR | -10.7% |
+| Equity finale | 7,079 $ |
+| Max drawdown | 3,813 $ (36.4%) |
 | Pertes consecutives max | 11 |
-| Sorties TP / SL / temps | 25 / 142 / 26 |
-| Duree moyenne | 136 bougies M15 |
+| Sorties TP / SL / temps | 25 / 143 / 25 |
+| Duree moyenne | 137 bougies M15 |
 
 | Annee | Trades | Win rate | P&L |
 |---|---|---|---|
-| 2022 | 53 | 19% | -1,694 $ |
-| 2023 | 60 | 22% | -1,118 $ |
-| 2024 | 69 | 29% | +175 $ |
-| 2025 | 11 | 27% | -106 $ |
+| 2022 | 52 | 17% | -1,933 $ |
+| 2023 | 60 | 23% | -1,030 $ |
+| 2024 | 70 | 29% | +139 $ |
+| 2025 | 11 | 27% | -98 $ |
 
 ### S3_SMC_Liquidity_Sweep
 
@@ -41,17 +41,17 @@
 | Esperance | -0.025 R / trade |
 | Gain moyen | +3.27 R |
 | Perte moyenne | -1.00 R |
-| Profit net | -886 $ (-8.9%) |
+| Profit net | -896 $ (-9.0%) |
 | CAGR | -3.0% |
-| Equity finale | 9,114 $ |
+| Equity finale | 9,104 $ |
 | Max drawdown | 2,926 $ (27.6%) |
 | Pertes consecutives max | 16 |
 | Sorties TP / SL / temps | 44 / 169 / 11 |
-| Duree moyenne | 88 bougies M15 |
+| Duree moyenne | 89 bougies M15 |
 
 | Annee | Trades | Win rate | P&L |
 |---|---|---|---|
 | 2022 | 63 | 22% | -553 $ |
 | 2023 | 76 | 18% | -1,620 $ |
-| 2024 | 69 | 29% | +1,501 $ |
+| 2024 | 69 | 29% | +1,491 $ |
 | 2025 | 16 | 19% | -214 $ |

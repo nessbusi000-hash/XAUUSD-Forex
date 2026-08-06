@@ -1,0 +1,28 @@
+=== #2 reglages par defaut ===
+Repertoire : /home/user/XAUUSD-Forex/backtest/data/pairs
+
+actif      bougies periode                   trades    /an     wr     pf  esperance      t
+XAUUSD     230,400 2012-05-15->2022-03-04      1009  102.9  24.5%   0.90    -0.083R  -1.52
+EURUSD     230,400 2012-11-14->2022-03-04       969  104.2  24.0%   0.76    -0.135R  -2.54
+GBPUSD     230,400 2012-11-14->2022-03-04       871   93.7  29.3%   1.00    +0.020R  +0.34
+AUDUSD     230,400 2012-11-14->2022-03-04      1060  114.0  24.5%   0.75    -0.143R  -2.82
+USDCHF     230,400 2012-11-14->2022-03-04       893   96.0  25.9%   0.84    -0.114R  -2.07
+USDCAD     230,400 2012-11-14->2022-03-04       910   97.8  25.1%   0.82    -0.108R  -1.94
+EURGBP     230,400 2012-11-14->2022-03-04       879   94.5  25.3%   0.89    -0.090R  -1.60
+EURCHF     230,400 2012-10-29->2022-03-04       886   94.8  26.4%   0.76    -0.164R  -3.20
+USDJPY     230,400 2012-11-14->2022-03-04       963  103.5  24.0%   0.80    -0.147R  -2.84
+EURJPY     230,400 2012-11-14->2022-03-04       962  103.4  27.0%   0.98    -0.013R  -0.24
+GBPJPY     230,400 2012-11-14->2022-03-04       880   94.6  26.4%   0.99    -0.066R  -1.20
+AUDJPY     230,400 2012-11-14->2022-03-04       963  103.5  29.5%   1.09    +0.080R  +1.40
+
+================================================================================================
+POOL DES 12 ACTIFS
+  Trades           : 11,245 (1203 par an tous actifs confondus)
+  Win rate         : 25.9%
+  Profit factor    : 0.89
+  Esperance        : -0.081 R (ecart-type 1.67)
+  Test t           : -5.13 (significatif au seuil de 5%)
+  Pour |t| = 2     : 1707 trades, soit 1.4 ans a la cadence du pool
+
+Les trades de differents actifs ne sont pas independants (correlations
+entre paires, sessions communes) : le t du pool est donc optimiste.
