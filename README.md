@@ -36,6 +36,7 @@ python3 backtest/robustness.py                             # fenetres independan
 python3 backtest/forward_test.py                           # forward test sur source independante
 python3 backtest/frequency.py                              # plafond de positions et signaux refuses
 python3 backtest/multi_asset.py                            # meme config sur 12 instruments
+python3 backtest/baseline_macd.py                          # repere retail : MACD sur M1 reconstruit depuis les ticks
 python3 backtest/scan.py --strategy s3                     # etude in-sample / out-of-sample
 python3 backtest/verify_data.py                            # audit des donnees (authenticite + coherence)
 ```
@@ -56,6 +57,9 @@ backtest/robustness.py      tenue sur fenetres independantes + significativite (
 backtest/forward_test.py    forward test post-selection sur une source de donnees independante
 backtest/frequency.py       frequence reelle des signaux et cout du plafond de positions
 backtest/multi_asset.py     meme strategie sur 12 instruments (frequence + generalisation)
+backtest/smc/baselines.py   strategies de reference retail (MACD) pour situer les strategies SMC
+backtest/baseline_macd.py   mesure du MACD sur son timeframe natif (M1)
+backtest/ticks_to_m1.py     construction de bougies M1 depuis des ticks + mesure du spread reel
 backtest/prepare_data.py    fusion des sources brutes en historique M15 canonique
 backtest/verify_data.py     audit du fichier de donnees (reperes de marche + coherence)
 backtest/tests/test_smc.py  tests unitaires

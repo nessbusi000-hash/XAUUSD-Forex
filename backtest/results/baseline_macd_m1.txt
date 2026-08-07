@@ -1,0 +1,21 @@
+XAUUSDm1_2018.csv (M1) : 157,051 bougies, 2018-01-02 -> 2018-06-19 (168 jours)
+Spread applique : 0.226 $
+
+--- Les deux conventions de pip du depot ---
+PIP_SIZE=0,10 (README) : SL 1,50 / TP 1,00           n=  3080 wr= 58.3% pf= 0.52 E=-0.195R ret=  -101.6% t=  -15.17
+PIP_SIZE=0,01 (defaut du code) : SL 0,15 / TP 0,10   n= 12505 wr=  0.0% pf= 0.00 E=-0.843R ret=  -137.1% t= -283.64
+
+--- Sans aucun frais, pour isoler leur poids ---
+PIP_SIZE=0,10, sans frais                            n=  3080 wr= 58.4% pf= 0.92 E=-0.027R ret=   -61.0% t=   -1.84
+PIP_SIZE=0,01, sans frais                            n= 12505 wr= 51.6% pf= 0.79 E=-0.139R ret=  -101.5% t=  -18.69
+
+--- Variante decrite par le README (cassure de niveau) ---
+variante README                                      aucun trade
+
+--- Filtre de session ('better results during London session') ---
+PIP_SIZE=0,10, sessions Londres + New York           n=  1432 wr= 58.3% pf= 0.54 E=-0.196R ret=   -94.2% t=  -10.38
+
+--- Le filtre 'price action' retire-t-il des signaux ? ---
+  croisements MACD                  12801
+  retenus par le filtre du code     12798
+  retenus par le filtre du README       0

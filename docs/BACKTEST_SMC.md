@@ -307,6 +307,53 @@ larges :
 (correlations, sessions communes), donc le `t` du pool est optimiste. Cela
 renforce la conclusion negative au lieu de l'affaiblir.*
 
+## Un point de comparaison retail : le MACD (`backtest/baseline_macd.py`)
+
+Aux entrees aleatoires s'ajoute un second repere : une strategie retail
+publique, [3aLaee/xauusd-trading-bot](https://github.com/3aLaee/xauusd-trading-bot)
+(MACD 12/26/9 + niveaux des 10 dernieres bougies, M1, SL 15 pips / TP 10 pips),
+portee dans notre moteur (`backtest/smc/baselines.py`) et mesuree sur **son**
+timeframe natif.
+
+Les donnees M1 sont reconstruites a partir de 18,8 millions de ticks
+([FX-Data/FX-Data-XAUUSD-DS](https://github.com/FX-Data/FX-Data-XAUUSD-DS),
+janvier-juin 2018) par `backtest/ticks_to_m1.py`, alignees sur l'heure serveur
+et recoupees avec notre serie M15 : ecart median de 0,022 $.
+
+**Retombee pour toute l'etude** : les ticks donnent le spread reel,
+**0,226 $ en moyenne**. L'hypothese de 0,30 $ retenue partout ailleurs etait
+donc conservatrice.
+
+| Configuration | Trades | Win rate | PF | Esperance | t |
+|---|---|---|---|---|---|
+| `PIP_SIZE=0,10` (README) : SL 1,50 / TP 1,00 | 3 080 | 58,3% | 0,52 | -0,195 R | -15,2 |
+| `PIP_SIZE=0,01` (defaut du code) : SL 0,15 / TP 0,10 | 12 505 | **0,0%** | 0,00 | -0,843 R | -283,6 |
+| `PIP_SIZE=0,10`, **sans aucun frais** | 3 080 | 58,4% | 0,92 | -0,027 R | -1,84 |
+| `PIP_SIZE=0,10`, sessions Londres + New York | 1 432 | 58,3% | 0,54 | -0,196 R | -10,4 |
+| Variante decrite par le README | **0** | — | — | — | — |
+
+Quatre enseignements :
+
+1. **Le reglage par defaut du code ruine le compte mecaniquement.** A
+   `PIP_SIZE=0,01`, le stop vaut 0,15 $ alors que le spread en vaut 0,226 : la
+   position s'ouvre au-dela de son propre stop. Win rate de **0,0% sur 12 505
+   trades**. Le README documente pourtant `PIP_SIZE=0.10`.
+2. **Avec la bonne convention, le win rate est bon (58,3%) mais insuffisant** :
+   un R:R de 1:0,67 demande plus de 60% avant frais.
+3. **Sans frais, l'esperance devient non significative** (-0,027 R, t = -1,84) :
+   le croisement MACD est proche d'un tirage a pile ou face et la totalite de la
+   perte vient de la friction. Meme diagnostic que pour les strategies SMC,
+   obtenu par un chemin independant.
+4. **Deux affirmations du depot ne resistent pas a la mesure** : le filtre
+   "price action" laisse passer 12 798 signaux sur 12 801 (il compare la cloture
+   au plus bas des 10 dernieres bougies, bougie courante comprise), et la
+   session de Londres ne change rien (-0,196 R contre -0,195 R). La strategie
+   telle que **decrite** dans le README est meme inexecutable : elle exige une
+   cloture au-dessus du plus haut des 10 dernieres bougies, bougie courante
+   comprise — 0 signal retenu sur 12 801.
+
+*Reserve : 5,5 mois de 2018, un seul broker, bougies construites sur le bid.*
+
 ## Limites connues
 
 1. **Donnees** : un seul broker, prix bid uniquement, spread suppose constant a

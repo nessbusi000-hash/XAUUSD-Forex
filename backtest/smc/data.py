@@ -18,6 +18,7 @@ import pandas as pd
 
 # Un pas de temps M15 en minutes, utilise pour dater la cloture des bougies HTF.
 TF_MINUTES = {
+    "M1": 1,
     "M5": 5,
     "M15": 15,
     "M30": 30,
@@ -27,6 +28,7 @@ TF_MINUTES = {
 }
 
 PANDAS_RULE = {
+    "M1": "1min",
     "M5": "5min",
     "M15": "15min",
     "M30": "30min",
