@@ -65,6 +65,7 @@ class ExecConfig:
     min_lot: float = 0.01
     max_lot: float = 50.0
     lot_step: float = 0.01
+    max_positions: int = 1  # positions simultanees autorisees
     max_hold_bars: int = 480  # 5 jours en M15
     breakeven_at_r: float = 0.0  # 0 = desactive
     partial_at_r: float = 0.0  # prise partielle a X R (0 = desactive)
@@ -102,7 +103,10 @@ class Backtester:
         self.trades: List[Trade] = []
         self.equity = self.cfg.initial_equity
         self.equity_curve: List[tuple] = []
-        self.open_trade: Optional[Trade] = None
+        self.open_trades: List[Trade] = []
+        # Signaux valides mais non executes faute de place : mesure directe du
+        # cout du plafond de positions simultanees.
+        self.skipped_signals = 0
 
     # ------------------------------------------------------------------ #
     def run(self) -> "BacktestResult":
@@ -116,9 +120,9 @@ class Backtester:
             now = m15.close_time[i]
             hi, lo, cl = m15.high[i], m15.low[i], m15.close[i]
 
-            # 1) Gestion de la position ouverte avec le range de la bougie.
-            if self.open_trade is not None:
-                self._manage(i, hi, lo, cl)
+            # 1) Gestion des positions ouvertes avec le range de la bougie.
+            for t in list(self.open_trades):
+                self._manage(t, i, hi, lo, cl)
 
             # 2) Alimentation des contextes HTF puis LTF (aucun look-ahead).
             while h_ptr < len(htf_bars) and htf_bars.close_time[h_ptr] <= now:
@@ -137,18 +141,26 @@ class Backtester:
             self.ctx_ltf.on_bar(m15.open[i], hi, lo, cl, m15.time[i])
 
             # 3) Recherche de signal a la cloture (hors periode de chauffe).
+            # La strategie est interrogee a chaque bougie, y compris position
+            # ouverte : son etat interne reste a jour et les signaux refuses
+            # faute de place sont comptes.
             if cfg.trade_from is not None and m15.time[i] < cfg.trade_from:
                 continue
-            if self.open_trade is None:
-                sig = self.strategy.on_bar(i, self.ctx_ltf, self.ctx_mtf, self.ctx_htf, m15)
-                if sig is not None:
-                    self._open(i, sig, cl)
+            sig = self.strategy.on_bar(i, self.ctx_ltf, self.ctx_mtf, self.ctx_htf, m15)
+            if sig is None:
+                continue
+            if len(self.open_trades) >= cfg.max_positions:
+                self.skipped_signals += 1
+                continue
+            self._open(i, sig, cl)
 
-        # Cloture de la position residuelle en fin de periode.
-        if self.open_trade is not None:
-            self._close(len(m15) - 1, self.m15.close[-1], "end_of_data")
+        # Cloture des positions residuelles en fin de periode.
+        for t in list(self.open_trades):
+            self._close(t, len(m15) - 1, self.m15.close[-1], "end_of_data")
 
-        return BacktestResult(self.trades, self.cfg.initial_equity, self.equity_curve, self.m15)
+        res = BacktestResult(self.trades, self.cfg.initial_equity, self.equity_curve, self.m15)
+        res.skipped_signals = self.skipped_signals
+        return res
 
     # ------------------------------------------------------------------ #
     def _open(self, i: int, sig: Signal, price: float) -> None:
@@ -163,7 +175,7 @@ class Backtester:
         lots = risk_amount / (sl_dist * cfg.contract_size)
         lots = max(cfg.min_lot, min(cfg.max_lot, round(lots / cfg.lot_step) * cfg.lot_step))
 
-        self.open_trade = Trade(
+        t = Trade(
             idx_in=i,
             time_in=self.m15.time[i],
             direction=sig.direction,
@@ -175,48 +187,47 @@ class Backtester:
             risk_amount=risk_amount,
             tag=sig.tag,
         )
-        self.open_trade.lots_open = self.open_trade.lots
+        t.lots_open = t.lots
+        self.open_trades.append(t)
 
-    def _manage(self, i: int, hi: float, lo: float, cl: float) -> None:
-        t = self.open_trade
+    def _manage(self, t: Trade, i: int, hi: float, lo: float, cl: float) -> None:
         cfg = self.cfg
         risk = abs(t.entry - t.sl0)
 
         if t.direction == BULL:
             t.mae_r = max(t.mae_r, (t.entry - lo) / risk)
             if lo <= t.sl:  # hypothese pessimiste : le SL passe avant le TP
-                self._close(i, t.sl, "SL")
+                self._close(t, i, t.sl, "SL")
                 return
             if hi >= t.tp:
-                self._close(i, t.tp, "TP")
+                self._close(t, i, t.tp, "TP")
                 return
             if cfg.partial_at_r > 0 and not t.partial_done:
                 lvl = t.entry + cfg.partial_at_r * risk
                 if hi >= lvl:
-                    self._take_partial(lvl)
+                    self._take_partial(t, lvl)
             if cfg.breakeven_at_r > 0 and hi >= t.entry + cfg.breakeven_at_r * risk:
                 t.sl = max(t.sl, t.entry)
         else:
             t.mae_r = max(t.mae_r, (hi - t.entry) / risk)
             if hi >= t.sl:
-                self._close(i, t.sl, "SL")
+                self._close(t, i, t.sl, "SL")
                 return
             if lo <= t.tp:
-                self._close(i, t.tp, "TP")
+                self._close(t, i, t.tp, "TP")
                 return
             if cfg.partial_at_r > 0 and not t.partial_done:
                 lvl = t.entry - cfg.partial_at_r * risk
                 if lo <= lvl:
-                    self._take_partial(lvl)
+                    self._take_partial(t, lvl)
             if cfg.breakeven_at_r > 0 and lo <= t.entry - cfg.breakeven_at_r * risk:
                 t.sl = min(t.sl, t.entry)
 
         if i - t.idx_in >= self.cfg.max_hold_bars:
-            self._close(i, cl, "time_stop")
+            self._close(t, i, cl, "time_stop")
 
-    def _take_partial(self, price: float) -> None:
+    def _take_partial(self, t: Trade, price: float) -> None:
         """Securise une fraction de la position (gestion classique SMC)."""
-        t = self.open_trade
         cfg = self.cfg
         closed = round(t.lots * cfg.partial_pct / cfg.lot_step) * cfg.lot_step
         closed = min(max(closed, cfg.min_lot), t.lots_open)
@@ -228,8 +239,7 @@ class Backtester:
         if cfg.be_on_partial:
             t.sl = t.entry
 
-    def _close(self, i: int, price: float, reason: str) -> None:
-        t = self.open_trade
+    def _close(self, t: Trade, i: int, price: float, reason: str) -> None:
         gross = (price - t.entry) * t.direction * t.lots_open * self.cfg.contract_size
         gross += t.partial_pnl
         cost = t.lots * self.cfg.commission_per_lot
@@ -245,7 +255,7 @@ class Backtester:
         t.equity_after = self.equity
         self.trades.append(t)
         self.equity_curve.append((t.time_out, self.equity))
-        self.open_trade = None
+        self.open_trades.remove(t)
 
 
 # --------------------------------------------------------------------------- #
@@ -253,6 +263,7 @@ class Backtester:
 # --------------------------------------------------------------------------- #
 class BacktestResult:
     def __init__(self, trades: List[Trade], initial_equity: float, curve, m15: Series):
+        self.skipped_signals = 0  # signaux refuses faute de place
         self.trades = trades
         self.initial_equity = initial_equity
         self.curve = curve

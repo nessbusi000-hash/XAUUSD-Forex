@@ -1,0 +1,30 @@
+Donnees : 424,996 bougies M15, 2006-11-27 -> 2025-03-21 (18.3 ans)
+
+=== #3 candidate (rr=4, Premium/Discount, pools=3, window=12) ===
+   plafond  trades    /an  refuses     wr     pf  esperance      t      DD  ans pour |t|=2
+         1     287   15.7       38  24.0%   1.13    +0.114R  +0.91   22.1%           88.4
+         2     321   17.5        4  24.6%   1.16    +0.136R  +1.14   23.3%           56.3
+         3     325   17.7        0  24.3%   1.14    +0.122R  +1.03   23.4%           68.5
+         5     325   17.7        0  24.3%   1.14    +0.122R  +1.03   23.4%           68.5
+        10     325   17.7        0  24.3%   1.14    +0.122R  +1.03   23.4%           68.5
+
+=== #3 reglages par defaut ===
+   plafond  trades    /an  refuses     wr     pf  esperance      t      DD  ans pour |t|=2
+         1     957   52.3      332  21.6%   0.80    -0.136R  -2.44   82.4%           12.3
+         2    1206   65.9       83  21.5%   0.80    -0.149R  -3.03   90.1%            8.0
+         3    1273   69.5       16  21.4%   0.80    -0.150R  -3.13   91.8%            7.5
+         5    1289   70.4        0  21.6%   0.80    -0.145R  -3.05   91.5%            7.9
+        10    1289   70.4        0  21.6%   0.80    -0.145R  -3.05   91.5%            7.9
+
+=== #2 reglages par defaut ===
+   plafond  trades    /an  refuses     wr     pf  esperance      t      DD  ans pour |t|=2
+         1    1134   61.9     1418  23.7%   0.84    -0.142R  -2.92   84.0%            8.6
+         2    1821   99.4      731  24.4%   0.86    -0.116R  -2.98   95.0%            8.3
+         3    2184  119.3      368  24.6%   0.88    -0.101R  -2.79   99.1%            9.4
+         5    2455  134.1       97  25.5%   0.90    -0.084R  -2.44   98.8%           12.3
+        10    2549  139.2        3  26.1%   0.92    -0.065R  -1.94   97.2%           19.5
+
+Lecture : 'refuses' = signaux valides ecartes parce que le plafond etait
+atteint. Si lever le plafond multiplie les trades sans degrader l'esperance,
+la frequence gagnee est gratuite ; si l'esperance s'effondre, les trades
+supplementaires etaient de moins bonne qualite.

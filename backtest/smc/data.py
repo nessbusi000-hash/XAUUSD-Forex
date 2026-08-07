@@ -18,6 +18,7 @@ import pandas as pd
 
 # Un pas de temps M15 en minutes, utilise pour dater la cloture des bougies HTF.
 TF_MINUTES = {
+    "M1": 1,
     "M5": 5,
     "M15": 15,
     "M30": 30,
@@ -27,6 +28,7 @@ TF_MINUTES = {
 }
 
 PANDAS_RULE = {
+    "M1": "1min",
     "M5": "5min",
     "M15": "15min",
     "M30": "30min",
@@ -62,9 +64,15 @@ DATE_FORMATS = ("%Y.%m.%d %H:%M", "%Y.%m.%d %H:%M:%S", "%Y-%m-%d %H:%M",
                 "%d/%m/%Y %H:%M", "%d.%m.%Y %H:%M")
 
 
-def load_csv(path: str, tf: str = "M15") -> Series:
+def load_csv(path: str, tf: str = "M15", scale: float | None = None) -> Series:
     """Charge un CSV OHLC. Tolerant sur le separateur, les noms de colonnes et
-    le format de date : les exports MetaTrader varient d'une source a l'autre."""
+    le format de date : les exports MetaTrader varient d'une source a l'autre.
+
+    `scale` divise les prix par une constante connue (les exports ejtrader
+    stockent les cotations en unites entieres : 10^digits). Sans `scale`, une
+    heuristique ramene les prix en centiemes vers leur valeur reelle, ce qui
+    convient a XAUUSD mais pas aux paires de devises — precisez `scale` pour
+    celles-ci."""
     df = pd.read_csv(path, sep=None, engine="python")
     df.columns = [str(c).strip().lower() for c in df.columns]
 
@@ -93,9 +101,10 @@ def load_csv(path: str, tf: str = "M15") -> Series:
     df = df[["time", "open", "high", "low", "close", "volume"]]
     df = df.dropna().drop_duplicates("time").sort_values("time").reset_index(drop=True)
 
-    if df["close"].median() > 20000:  # prix exprimes en centiemes
+    divisor = scale if scale else (100.0 if df["close"].median() > 20000 else 1.0)
+    if divisor != 1.0:
         for col in ("open", "high", "low", "close"):
-            df[col] = df[col] / 100.0
+            df[col] = df[col] / divisor
 
     return _to_series(df, tf)
 

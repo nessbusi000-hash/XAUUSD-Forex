@@ -34,7 +34,7 @@ clone_sparse() {  # repo, dossier, chemin a extraire
 
 echo "== Telechargement des sources =="
 clone_sparse "BaseMax/XAUUSD-LSTM"          "basemax"  "XAU_15m_data.csv"
-clone_sparse "ejtraderLabs/historical-data" "ejtrader" "XAUUSD"
+clone_sparse "ejtraderLabs/historical-data" "ejtrader" "*/*m15.csv"
 # Source du forward test : bougies 5 min en UTC allant jusqu'a aout 2025,
 # soit au-dela de la coupure de l'historique principal (21 mars 2025).
 clone_sparse "ilahuerta-IA/backtrader-pullback-window-xauusd" "forward" "data/XAUUSD_5m_5Yea.csv"
@@ -42,6 +42,10 @@ clone_sparse "ilahuerta-IA/backtrader-pullback-window-xauusd" "forward" "data/XA
 cp "$TMP"/ejtrader/XAUUSD/XAUUSD*.csv "$DEST"/ 2>/dev/null || true
 mv "$DEST/XAUUSDm15.csv" "$DEST/XAUUSDm15_ejtrader.csv" 2>/dev/null || true
 cp "$TMP"/forward/data/XAUUSD_5m_5Yea.csv "$DEST/XAUUSD_5m_forward.csv" 2>/dev/null || true
+
+# Les 11 autres paires servent au test multi-actifs (backtest/multi_asset.py).
+mkdir -p "$DEST/pairs"
+cp "$TMP"/ejtrader/*/*m15.csv "$DEST/pairs"/ 2>/dev/null || true
 
 echo
 echo "== Preparation de l'historique M15 =="

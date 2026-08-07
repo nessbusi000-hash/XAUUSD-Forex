@@ -8,6 +8,8 @@ python3 backtest/run_backtest.py --strategy both --out backtest/results
 python3 backtest/benchmark.py            # SMC vs entrees aleatoires
 python3 backtest/robustness.py           # fenetres independantes + test t
 python3 backtest/forward_test.py         # forward test sur source independante
+python3 backtest/frequency.py            # plafond de positions et signaux refuses
+python3 backtest/multi_asset.py          # meme config sur 12 instruments
 python3 backtest/scan.py --strategy s3   # balayage parametrique IS / OOS
 ```
 
@@ -65,14 +67,14 @@ pas le fixing spot de Londres.
 
 | Metrique | #2 POI Continuation | #3 Liquidity Sweep |
 |---|---|---|
-| Trades | 1122 (61/an) | 957 (52/an) |
-| Win rate | 23,6% | 21,6% |
-| Profit factor | **0,82** | **0,80** |
-| Esperance | **-0,147 R** | **-0,136 R** |
-| Gain moyen / perte moyenne | +2,59 R / -0,99 R | +3,04 R / -1,01 R |
-| Resultat net | -8 234 $ (-82,3%) | -7 700 $ (-77,0%) |
-| Max drawdown | 85,0% | 82,4% |
-| Test t sur l'esperance | **t = -3,01** | **t = -2,44** |
+| Trades | 1134 (62/an) | 957 (52/an) |
+| Win rate | 23,7% | 21,6% |
+| Profit factor | **0,84** | **0,80** |
+| Esperance | **-0,142 R** | **-0,136 R** |
+| Gain moyen / perte moyenne | +2,60 R / -0,99 R | +3,04 R / -1,01 R |
+| Resultat net | -8 172 $ (-81,7%) | -7 710 $ (-77,1%) |
+| Max drawdown | 84,0% | 82,4% |
+| Test t sur l'esperance | **t = -2,92** | **t = -2,44** |
 
 Le detail annuel est dans [`backtest/results/report.md`](../backtest/results/report.md),
 le journal de trades dans `backtest/results/trades_s2.csv` et `trades_s3.csv`.
@@ -112,20 +114,20 @@ Meme moteur, meme gestion du risque, entree **aleatoire** :
 
 | Strategie | Trades | Win rate | PF | Esperance |
 |---|---|---|---|---|
-| #2 POI Continuation | 1122 | 23,6% | 0,82 | -0,147 R |
+| #2 POI Continuation | 1134 | 23,7% | 0,84 | -0,142 R |
 | #3 Liquidity Sweep | 957 | 21,6% | 0,80 | -0,136 R |
-| Entree aleatoire (graine 7) | 1351 | 25,2% | 0,79 | -0,115 R |
-| Entree aleatoire (graine 21) | 1305 | 24,1% | 0,78 | -0,154 R |
-| Aleatoire dans le sens du biais H4 | 1328 | 25,2% | 0,81 | -0,117 R |
-| Aleatoire contre le biais H4 | 1340 | 24,0% | 0,84 | -0,152 R |
+| Entree aleatoire (graine 7) | 1337 | 23,3% | 0,72 | -0,183 R |
+| Entree aleatoire (graine 21) | 1350 | 26,3% | 0,89 | -0,071 R |
+| Aleatoire dans le sens du biais H4 | 1339 | 23,4% | 0,75 | -0,175 R |
+| Aleatoire contre le biais H4 | 1344 | 24,2% | 0,81 | -0,152 R |
 
 **Les setups SMC tombent dans la fourchette du hasard**, et l'ecart entre deux
-graines aleatoires (-0,115 R vs -0,154 R) depasse l'ecart entre le hasard et les
+graines aleatoires (-0,183 R vs -0,071 R) depasse l'ecart entre le hasard et les
 strategies SMC. Le filtre de biais H4 lui-meme ne separe pas : entrer dans son
-sens (-0,117 R) ou contre (-0,152 R) donne des resultats du meme ordre.
+sens (-0,175 R) ou contre (-0,152 R) donne des resultats du meme ordre.
 
-Sans frais, l'esperance remonte a -0,095 R (#2) et -0,060 R (#3), contre
--0,003 R pour le hasard : les frais pesent, mais ne sont pas la cause de l'ecart.
+Sans frais, l'esperance remonte a -0,090 R (#2) et -0,060 R (#3) : les frais
+pesent, mais ne sont pas la cause de l'ecart.
 
 ## In-sample / out-of-sample (`backtest/scan.py`)
 
@@ -222,13 +224,135 @@ necessaire pour atteindre `|t| = 2` :
 |---|---|---|
 | #3 candidate (E=+0,114 R, ecart-type 2,13) | 1 396 | **88,9 ans** |
 | #3 par defaut (E=-0,136 R, ecart-type 1,73) | 647 | 12,4 ans |
-| #2 par defaut (E=-0,147 R, ecart-type 1,64) | 498 | 8,1 ans |
+| #2 par defaut (E=-0,142 R, ecart-type 1,64) | 534 | 8,6 ans |
 
 C'est la conclusion pratique : meme si l'edge de la candidate etait reel, il est
 **indetectable a l'echelle d'une vie de trading** a 16 trades par an. Le
 protocole ne peut pas la valider ; seule une augmentation massive de la
 frequence (autres actifs, timeframe inferieur, regles moins restrictives)
 rendrait la question decidable.
+
+## Augmenter la frequence des signaux
+
+Le forward test avait identifie le verrou : a ~16 trades par an, la candidate
+demanderait 89 ans pour etre validee. Deux leviers ont ete mesures.
+
+### Levier 1 — lever le plafond de positions simultanees (`backtest/frequency.py`)
+
+Ce levier ne touche **aucune** regle d'entree : il autorise seulement plusieurs
+positions en meme temps. Le moteur compte desormais les signaux refuses faute de
+place (`BacktestResult.skipped_signals`).
+
+| Plafond | Trades | Par an | Signaux refuses | PF | Esperance |
+|---|---|---|---|---|---|
+| 1 | 287 | 15,7 | 38 | 1,13 | +0,114 R |
+| 2 | 321 | 17,5 | 4 | 1,16 | +0,136 R |
+| 3 et + | 325 | 17,7 | 0 | 1,14 | +0,122 R |
+
+**Impasse pour la candidate** : elle ne genere que 325 signaux en 18 ans, dont
+38 seulement etaient bloques. Le plafond n'etait pas le verrou — la strategie
+est intrinsequement rare. On passe de 89 a 68 ans pour trancher : inutile.
+
+Pour la #2 par defaut, le plafond bloquait au contraire 1 418 signaux (1 134
+trades executes sur 2 552 generes) : la frequence executee y sous-estimait
+largement la frequence reelle.
+
+### Levier 2 — changer d'actif (`backtest/multi_asset.py`)
+
+Le vrai multiplicateur, et surtout le seul test qui compte : un edge SMC repose
+sur un comportement institutionnel cense exister sur tout marche liquide. S'il
+n'apparait que sur l'or, c'est du bruit.
+
+Meme configuration candidate, 12 instruments, M15 2012-2022. Les statistiques
+sont comparees en **R**, sans dimension ; le spread vaut 1,5 point de base du
+prix median et les bornes de stop sont exprimees en pourcentage du prix.
+
+| Actif | Trades | Par an | Win rate | PF | Esperance | t |
+|---|---|---|---|---|---|---|
+| XAUUSD | 190 | 19,4 | 25,8% | 1,24 | +0,197 R | +1,24 |
+| EURGBP | 294 | 31,6 | 26,2% | 1,15 | +0,134 R | +1,11 |
+| USDCHF | 294 | 31,6 | 23,8% | 1,07 | +0,075 R | +0,63 |
+| GBPUSD | 262 | 28,2 | 21,8% | 0,95 | -0,017 R | -0,14 |
+| EURJPY | 239 | 25,7 | 20,5% | 0,97 | -0,026 R | -0,21 |
+| GBPJPY | 257 | 27,6 | 18,3% | 0,80 | -0,105 R | -0,87 |
+| USDJPY | 192 | 20,6 | 18,2% | 0,83 | -0,137 R | -0,99 |
+| AUDJPY | 226 | 24,3 | 19,0% | 0,80 | -0,152 R | -1,22 |
+| EURCHF | 329 | 35,2 | 21,6% | 0,78 | -0,205 R | **-2,20** |
+| AUDUSD | 223 | 24,0 | 17,5% | 0,69 | -0,252 R | **-2,10** |
+| EURUSD | 259 | 27,8 | 15,8% | 0,63 | -0,319 R | **-2,95** |
+| USDCAD | 259 | 27,8 | 16,2% | 0,55 | -0,339 R | **-3,26** |
+| **Pool** | **3 024** | **324** | **20,5%** | **0,88** | **-0,097 R** | **-2,80** |
+
+**La frequence recherchee est atteinte — et elle tranche contre la candidate.**
+324 trades par an au lieu de 16 : le delai pour atteindre `|t| = 2` tombe de
+89 ans a 4,8 ans, et le pool est deja significativement **negatif**. La
+configuration n'est positive que sur l'or, ou elle n'atteint meme pas la
+significativite (t = +1,24), et perd sur 9 des 11 autres paires, dont quatre de
+maniere significative.
+
+C'est la conclusion la plus solide de toute l'etude : **l'edge apparent de la
+candidate etait un artefact propre a XAUUSD**, exactement ce que le tirage de
+144 configurations laissait craindre.
+
+Les reglages par defaut confirment le tableau sur des echantillons encore plus
+larges :
+
+| Configuration | Trades (12 actifs) | PF | Esperance | t |
+|---|---|---|---|---|
+| #3 candidate | 3 024 | 0,88 | -0,097 R | -2,80 |
+| #3 par defaut | 8 270 | 0,85 | -0,119 R | -6,28 |
+| #2 par defaut | 11 245 | 0,89 | -0,081 R | -5,13 |
+
+*Reserve : les trades de paires differentes ne sont pas independants
+(correlations, sessions communes), donc le `t` du pool est optimiste. Cela
+renforce la conclusion negative au lieu de l'affaiblir.*
+
+## Un point de comparaison retail : le MACD (`backtest/baseline_macd.py`)
+
+Aux entrees aleatoires s'ajoute un second repere : une strategie retail
+publique, [3aLaee/xauusd-trading-bot](https://github.com/3aLaee/xauusd-trading-bot)
+(MACD 12/26/9 + niveaux des 10 dernieres bougies, M1, SL 15 pips / TP 10 pips),
+portee dans notre moteur (`backtest/smc/baselines.py`) et mesuree sur **son**
+timeframe natif.
+
+Les donnees M1 sont reconstruites a partir de 18,8 millions de ticks
+([FX-Data/FX-Data-XAUUSD-DS](https://github.com/FX-Data/FX-Data-XAUUSD-DS),
+janvier-juin 2018) par `backtest/ticks_to_m1.py`, alignees sur l'heure serveur
+et recoupees avec notre serie M15 : ecart median de 0,022 $.
+
+**Retombee pour toute l'etude** : les ticks donnent le spread reel,
+**0,226 $ en moyenne**. L'hypothese de 0,30 $ retenue partout ailleurs etait
+donc conservatrice.
+
+| Configuration | Trades | Win rate | PF | Esperance | t |
+|---|---|---|---|---|---|
+| `PIP_SIZE=0,10` (README) : SL 1,50 / TP 1,00 | 3 080 | 58,3% | 0,52 | -0,195 R | -15,2 |
+| `PIP_SIZE=0,01` (defaut du code) : SL 0,15 / TP 0,10 | 12 505 | **0,0%** | 0,00 | -0,843 R | -283,6 |
+| `PIP_SIZE=0,10`, **sans aucun frais** | 3 080 | 58,4% | 0,92 | -0,027 R | -1,84 |
+| `PIP_SIZE=0,10`, sessions Londres + New York | 1 432 | 58,3% | 0,54 | -0,196 R | -10,4 |
+| Variante decrite par le README | **0** | — | — | — | — |
+
+Quatre enseignements :
+
+1. **Le reglage par defaut du code ruine le compte mecaniquement.** A
+   `PIP_SIZE=0,01`, le stop vaut 0,15 $ alors que le spread en vaut 0,226 : la
+   position s'ouvre au-dela de son propre stop. Win rate de **0,0% sur 12 505
+   trades**. Le README documente pourtant `PIP_SIZE=0.10`.
+2. **Avec la bonne convention, le win rate est bon (58,3%) mais insuffisant** :
+   un R:R de 1:0,67 demande plus de 60% avant frais.
+3. **Sans frais, l'esperance devient non significative** (-0,027 R, t = -1,84) :
+   le croisement MACD est proche d'un tirage a pile ou face et la totalite de la
+   perte vient de la friction. Meme diagnostic que pour les strategies SMC,
+   obtenu par un chemin independant.
+4. **Deux affirmations du depot ne resistent pas a la mesure** : le filtre
+   "price action" laisse passer 12 798 signaux sur 12 801 (il compare la cloture
+   au plus bas des 10 dernieres bougies, bougie courante comprise), et la
+   session de Londres ne change rien (-0,196 R contre -0,195 R). La strategie
+   telle que **decrite** dans le README est meme inexecutable : elle exige une
+   cloture au-dessus du plus haut des 10 dernieres bougies, bougie courante
+   comprise — 0 signal retenu sur 12 801.
+
+*Reserve : 5,5 mois de 2018, un seul broker, bougies construites sur le bid.*
 
 ## Limites connues
 
@@ -255,15 +379,22 @@ de l'etude initiale se confirme et se renforce : **les reglages par defaut des
 strategies #2 et #3 sont perdants de facon statistiquement etablie**, et ne se
 distinguent pas d'entrees aleatoires a R:R equivalent.
 
-La seule piste non refutee est la #3 filtree par Premium/Discount sur des
-clusters de 3 sommets, positive sur quatre fenetres consecutives puis sur un
-forward test de quatre mois (2 trades, 2 gagnants) — mais sans significativite
-statistique, et le calcul de puissance donne **89 ans** de trading avant de
-pouvoir trancher a sa cadence. Autrement dit : cette piste n'est pas
-verifiable en pratique telle quelle. C'est precisement pour cela que l'EA
-demarre en mode alerte.
+La derniere piste ouverte — la #3 filtree par Premium/Discount sur des clusters
+de 3 sommets — **est maintenant refutee**. Elle tenait sur quatre fenetres
+consecutives de XAUUSD et sur un forward test de quatre mois, mais le calcul de
+puissance montrait qu'il faudrait 89 ans pour la valider sur l'or seul. En
+portant la meme configuration sur 12 instruments, la cadence passe a 324 trades
+par an, le delai tombe a 4,8 ans — et le verdict arrive immediatement :
+esperance de **-0,097 R avec t = -2,80** sur 3 024 trades. L'edge n'existait
+que sur l'or, sans y etre significatif.
 
-Pistes qui restent a tester avec ce meme protocole : entree limite au 50% de
-l'OB plutot qu'a la cloture du CHoCH, filtre de news macro, exigence de
-confluence OB + FVG, trailing sur structure M15, et validation sur un second
-actif.
+Il ne reste donc aucune configuration non refutee dans ce projet. C'est un
+resultat negatif, mais etabli sur 18 ans, 12 instruments et plus de 22 000
+trades cumules, avec un protocole (IS/OOS, benchmark aleatoire, fenetres
+independantes, forward test, calcul de puissance, test multi-actifs)
+directement reutilisable pour evaluer une variante future.
+
+Pistes qui restent a tester avec ce meme protocole, desormais capables de
+trancher en quelques annees de donnees grace au pool multi-actifs : entree
+limite au 50% de l'OB plutot qu'a la cloture du CHoCH, filtre de news macro,
+exigence de confluence OB + FVG, trailing sur structure M15, execution en M5.
