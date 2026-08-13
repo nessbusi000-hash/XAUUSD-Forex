@@ -98,6 +98,9 @@ void OnTimer()
    if(day6>maxPriceOfLastWeek){
       maxPriceOfLastWeek = day6;
    }
+   if(day7>maxPriceOfLastWeek){
+      maxPriceOfLastWeek = day7;
+   }
 
    double currentBuyPrice = MarketInfo(mySymbol, MODE_ASK); //1802.510
    double currentSellPrice = MarketInfo(mySymbol, MODE_BID); //1802.060
